@@ -25,8 +25,8 @@ public abstract class IntegrationTest {
 
     protected static int WG_PORT = 8080;
     protected static int WW_PORT = 9090;
-    private static String WEBGOAT_HOSTNAME = "127.0.0.1";//"www.webgoat.local";
-    private static String WEBWOLF_HOSTNAME = "127.0.0.1";//"www.webwolf.local";
+    private static String WEBGOAT_HOSTNAME = ((System.getProperty("WEBGOAT_HOSTNAME") == null) ? "127.0.0.1" : System.getProperty("WEBGOAT_HOSTNAME")); //"www.webgoat.local";
+    private static String WEBWOLF_HOSTNAME = ((System.getProperty("WEBWOLF_HOSTNAME") == null) ? "127.0.0.1" : System.getProperty("WEBWOLF_HOSTNAME")); //"www.webwolf.local";
     
     /*
      * To test docker compose/stack solution: 
@@ -72,7 +72,11 @@ public abstract class IntegrationTest {
     }
 
     private static boolean isAlreadyRunning(int port) {
-        try (var ignored = new Socket("127.0.0.1", port)) {
+		
+		System.out.println("WEBGOAT_HOSTNAME:"+System.getProperty("WEBGOAT_HOSTNAME"));
+		System.out.println("WEBWOLF_HOSTNAME:"+System.getProperty("WEBWOLF_HOSTNAME"));
+		
+        try (var ignored = new Socket((System.getProperty("WEBGOAT_HOSTNAME") == null) ? "127.0.0.1" : System.getProperty("WEBGOAT_HOSTNAME"), port)) {
             return true;
         } catch (IOException e) {
             return false;
